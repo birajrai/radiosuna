@@ -208,32 +208,27 @@ export default function RadioIndex({ stations, pradeshList }) {
                             </h2>
                         </div>
 
-                        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                        <div className="grid grid-cols-3 gap-6 sm:grid-cols-3 lg:grid-cols-6">
                             {filteredStations.map((station) => (
                                 <div
                                     key={station.id}
-                                    className="bg-white rounded-xl shadow-md hover:shadow-lg transition-all transform hover:scale-105 overflow-hidden border border-gray-100 relative group"
+                                    className="bg-gray-50 rounded-lg hover:shadow-lg transition-all transform hover:scale-105 overflow-hidden relative group"
                                 >
-                                    <Link href={`/radio/${station.slug}`}>
-                                        <div className="aspect-square bg-gray-50 border-b border-gray-100">
+                                    <Link href={`/${station.slug}`}>
+                                        <div className="flex flex-col items-center py-4">
+                                            {/* Logo */}
                                             <img
                                                 src={station.logo || '/api/placeholder/200/200'}
                                                 alt={station.name}
-                                                className="w-full h-full object-contain p-4"
+                                                className="w-32 h-32 object-cover rounded-full p-2 mb-4 border"
+                                                style={{ borderColor: `#${Math.floor(Math.random() * 16777215).toString(16)}` }} // Random border color
                                             />
-                                        </div>
-                                        <div className="p-4">
-                                            <h3 className="font-semibold text-gray-900 mb-2">
-                                                {station.name}
-                                            </h3>
-                                            <div className="space-y-1">
-                                                <p className="text-sm text-gray-600 flex items-center">
-                                                    <FontAwesomeIcon icon={faBroadcastTower} className="w-4 mr-2" />
+
+                                            {/* Name and Frequency */}
+                                            <div className="text-center px-4">
+                                                <h3 className="font-semibold text-gray-900 mb-1 text-sm">{station.name}</h3> {/* Station Name */}
+                                                <p className="text-xs text-gray-600 flex items-center justify-center">
                                                     {station.frequency}
-                                                </p>
-                                                <p className="text-sm text-gray-600 flex items-center">
-                                                    <FontAwesomeIcon icon={faMapLocation} className="w-4 mr-2" />
-                                                    {station.pradesh}
                                                 </p>
                                             </div>
                                         </div>
@@ -243,12 +238,12 @@ export default function RadioIndex({ stations, pradeshList }) {
                                             e.preventDefault();
                                             toggleFavorite(station.slug);
                                         }}
-                                        className={`absolute top-3 right-3 p-2 rounded-full transition-opacity ${favorites.includes(station.slug)
+                                        className={`absolute top-2 right-2 p-2 rounded-full transition-opacity ${favorites.includes(station.slug)
                                             ? 'bg-red-100 text-red-500'
                                             : 'bg-gray-100 text-gray-400'
                                             } opacity-0 group-hover:opacity-100`}
                                     >
-                                        <FontAwesomeIcon icon={faHeart} />
+                                        <FontAwesomeIcon icon={faHeart} className="w-6 h-6" /> {/* Heart icon */}
                                     </button>
                                 </div>
                             ))}
