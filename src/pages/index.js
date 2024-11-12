@@ -1,0 +1,275 @@
+import React, { useState, useEffect } from 'react';
+import Head from 'next/head';
+import Link from 'next/link';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+    faSearch,
+    faMapLocation,
+    faBroadcastTower,
+    faFilter,
+    faSort,
+    faTimes,
+    faHeart,
+    faHeartBroken
+} from '@fortawesome/free-solid-svg-icons';
+
+export async function getStaticProps() {
+    const res = await fetch('http://localhost:3000/api/streams.json');
+    const stations = await res.json();
+
+    // Get unique pradesh values
+    const pradeshList = [...new Set(stations.map(station => station.pradesh))].sort();
+
+    return {
+        props: {
+            stations,
+            pradeshList
+        },
+        revalidate: 3600,
+    };
+}
+
+export default function RadioIndex({ stations, pradeshList }) {
+    const [searchTerm, setSearchTerm] = useState('');
+    const [selectedPradesh, setSelectedPradesh] = useState('');
+    const [favorites, setFavorites] = useState([]);
+    const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
+    const [sortOrder, setSortOrder] = useState('asc'); // 'asc' or 'desc'
+
+    useEffect(() => {
+        // Load favorites from localStorage
+        const storedFavorites = JSON.parse(localStorage.getItem('radioFavorites') || '[]');
+        setFavorites(storedFavorites);
+    }, []);
+
+    const toggleFavorite = (slug) => {
+        const newFavorites = favorites.includes(slug)
+            ? favorites.filter(f => f !== slug)
+            : [...favorites, slug];
+
+        setFavorites(newFavorites);
+        localStorage.setItem('radioFavorites', JSON.stringify(newFavorites));
+    };
+
+    const filteredStations = stations
+        .filter(station => {
+            const matchesSearch = station.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                station.frequency.toLowerCase().includes(searchTerm.toLowerCase());
+            const matchesPradesh = !selectedPradesh || station.pradesh === selectedPradesh;
+            const matchesFavorites = !showFavoritesOnly || favorites.includes(station.slug);
+            return matchesSearch && matchesPradesh && matchesFavorites;
+        })
+        .sort((a, b) => {
+            const nameA = a.name.toLowerCase();
+            const nameB = b.name.toLowerCase();
+            return sortOrder === 'asc'
+                ? nameA.localeCompare(nameB)
+                : nameB.localeCompare(nameA);
+        });
+
+    const resetFilters = () => {
+        setSearchTerm('');
+        setSelectedPradesh('');
+        setShowFavoritesOnly(false);
+    };
+
+    return (
+        <>
+            <Head>
+                <title>Online Radio Stations - Listen Live</title>
+                <meta name="description" content="Listen to your favorite radio stations online. Browse through our collection of radio stations from different provinces of Nepal." />
+            </Head>
+
+            <div className="min-h-screen bg-gray-50">
+                <div className="max-w-7xl mx-auto p-4 md:p-6 space-y-8">
+                    {/* Header */}
+                    <div className="text-center space-y-4">
+                        <h1 className="text-4xl font-bold text-gray-900">
+                            Online Radio Stations
+                        </h1>
+                        <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                            Listen to your favorite radio stations from across Nepal. Browse by province, search by name, or save your favorites for quick access.
+                        </p>
+                    </div>
+
+                    {/* Search and Filters */}
+                    <div className="bg-white rounded-xl shadow-md p-6 space-y-4">
+                        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+                            {/* Search Input */}
+                            <div className="relative">
+                                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <FontAwesomeIcon icon={faSearch} className="text-gray-400" />
+                                </div>
+                                <input
+                                    type="text"
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                    placeholder="Search stations..."
+                                    className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                />
+                            </div>
+
+                            {/* Pradesh Filter */}
+                            <div className="relative">
+                                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <FontAwesomeIcon icon={faMapLocation} className="text-gray-400" />
+                                </div>
+                                <select
+                                    value={selectedPradesh}
+                                    onChange={(e) => setSelectedPradesh(e.target.value)}
+                                    className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none"
+                                >
+                                    <option value="">All Provinces</option>
+                                    {pradeshList.map((pradesh) => (
+                                        <option key={pradesh} value={pradesh}>
+                                            {pradesh} Province
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+
+                            {/* Sort Order */}
+                            <button
+                                onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}
+                                className="flex items-center justify-center px-4 py-2 border border-gray-200 rounded-lg hover:bg-gray-50"
+                            >
+                                <FontAwesomeIcon icon={faSort} className="mr-2 text-gray-400" />
+                                Sort {sortOrder === 'asc' ? 'A-Z' : 'Z-A'}
+                            </button>
+
+                            {/* Favorites Toggle */}
+                            <button
+                                onClick={() => setShowFavoritesOnly(!showFavoritesOnly)}
+                                className={`flex items-center justify-center px-4 py-2 border rounded-lg transition-colors ${showFavoritesOnly
+                                    ? 'border-red-200 bg-red-50 text-red-600 hover:bg-red-100'
+                                    : 'border-gray-200 hover:bg-gray-50'
+                                    }`}
+                            >
+                                <FontAwesomeIcon
+                                    icon={showFavoritesOnly ? faHeartBroken : faHeart}
+                                    className="mr-2"
+                                />
+                                {showFavoritesOnly ? 'Show All' : 'Show Favorites'}
+                            </button>
+                        </div>
+
+                        {/* Active Filters */}
+                        {(searchTerm || selectedPradesh || showFavoritesOnly) && (
+                            <div className="flex items-center gap-2 pt-2">
+                                <span className="text-sm text-gray-500">Active filters:</span>
+                                {searchTerm && (
+                                    <span className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-blue-100 text-blue-700">
+                                        "{searchTerm}"
+                                        <button
+                                            onClick={() => setSearchTerm('')}
+                                            className="ml-2 hover:text-blue-900"
+                                        >
+                                            <FontAwesomeIcon icon={faTimes} />
+                                        </button>
+                                    </span>
+                                )}
+                                {selectedPradesh && (
+                                    <span className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-green-100 text-green-700">
+                                        {selectedPradesh} Province
+                                        <button
+                                            onClick={() => setSelectedPradesh('')}
+                                            className="ml-2 hover:text-green-900"
+                                        >
+                                            <FontAwesomeIcon icon={faTimes} />
+                                        </button>
+                                    </span>
+                                )}
+                                {showFavoritesOnly && (
+                                    <span className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-red-100 text-red-700">
+                                        Favorites Only
+                                        <button
+                                            onClick={() => setShowFavoritesOnly(false)}
+                                            className="ml-2 hover:text-red-900"
+                                        >
+                                            <FontAwesomeIcon icon={faTimes} />
+                                        </button>
+                                    </span>
+                                )}
+                                <button
+                                    onClick={resetFilters}
+                                    className="text-sm text-gray-500 hover:text-gray-700 ml-2"
+                                >
+                                    Reset all
+                                </button>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Stations Grid */}
+                    <div className="space-y-4">
+                        <div className="flex justify-between items-center">
+                            <h2 className="text-xl font-semibold text-gray-900">
+                                {filteredStations.length} {filteredStations.length === 1 ? 'Station' : 'Stations'} Found
+                            </h2>
+                        </div>
+
+                        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                            {filteredStations.map((station) => (
+                                <div
+                                    key={station.id}
+                                    className="bg-white rounded-xl shadow-md hover:shadow-lg transition-all transform hover:scale-105 overflow-hidden border border-gray-100 relative group"
+                                >
+                                    <Link href={`/radio/${station.slug}`}>
+                                        <div className="aspect-square bg-gray-50 border-b border-gray-100">
+                                            <img
+                                                src={station.logo || '/api/placeholder/200/200'}
+                                                alt={station.name}
+                                                className="w-full h-full object-contain p-4"
+                                            />
+                                        </div>
+                                        <div className="p-4">
+                                            <h3 className="font-semibold text-gray-900 mb-2">
+                                                {station.name}
+                                            </h3>
+                                            <div className="space-y-1">
+                                                <p className="text-sm text-gray-600 flex items-center">
+                                                    <FontAwesomeIcon icon={faBroadcastTower} className="w-4 mr-2" />
+                                                    {station.frequency}
+                                                </p>
+                                                <p className="text-sm text-gray-600 flex items-center">
+                                                    <FontAwesomeIcon icon={faMapLocation} className="w-4 mr-2" />
+                                                    {station.pradesh}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </Link>
+                                    <button
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            toggleFavorite(station.slug);
+                                        }}
+                                        className={`absolute top-3 right-3 p-2 rounded-full transition-opacity ${favorites.includes(station.slug)
+                                            ? 'bg-red-100 text-red-500'
+                                            : 'bg-gray-100 text-gray-400'
+                                            } opacity-0 group-hover:opacity-100`}
+                                    >
+                                        <FontAwesomeIcon icon={faHeart} />
+                                    </button>
+                                </div>
+                            ))}
+                        </div>
+
+                        {filteredStations.length === 0 && (
+                            <div className="text-center py-12 bg-white rounded-xl shadow-md">
+                                <p className="text-gray-600">
+                                    No radio stations found matching your criteria.
+                                </p>
+                                <button
+                                    onClick={resetFilters}
+                                    className="mt-4 text-blue-600 hover:text-blue-700"
+                                >
+                                    Clear all filters
+                                </button>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            </div>
+        </>
+    );
+}
