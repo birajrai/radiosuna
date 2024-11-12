@@ -5,7 +5,7 @@ import Link from 'next/link';
 
 export default function Footer() {
     return (
-        <footer className="bg-blue-700 text-white pt-8 pb-4">
+        <footer className="bg-gray-300 text-gray-800 pt-8 pb-4">  {/* Changed to bg-gray-300 for a silver-like background */}
             <div className="container mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8 text-sm">
 
                 {/* Contact Information */}
@@ -38,16 +38,16 @@ export default function Footer() {
                     <p>&copy; 2024 Copyright Example Company | All rights reserved.</p>
                     <p className="mt-1 text-xs">All content published here is the property of Example Company.</p>
                     <div className="flex space-x-4 mt-4">
-                        <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="text-white hover:text-gray-300" aria-label="Facebook">
+                        <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="text-gray-800 hover:text-gray-600" aria-label="Facebook">
                             <FontAwesomeIcon icon={faFacebook} size="lg" />
                         </a>
-                        <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="text-white hover:text-gray-300" aria-label="Twitter">
+                        <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="text-gray-800 hover:text-gray-600" aria-label="Twitter">
                             <FontAwesomeIcon icon={faTwitter} size="lg" />
                         </a>
-                        <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" className="text-white hover:text-gray-300" aria-label="YouTube">
+                        <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" className="text-gray-800 hover:text-gray-600" aria-label="YouTube">
                             <FontAwesomeIcon icon={faYoutube} size="lg" />
                         </a>
-                        <a href="mailto:support@example.com" className="text-white hover:text-gray-300" aria-label="Email">
+                        <a href="mailto:support@example.com" className="text-gray-800 hover:text-gray-600" aria-label="Email">
                             <FontAwesomeIcon icon={faEnvelope} size="lg" />
                         </a>
                     </div>
