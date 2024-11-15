@@ -10,7 +10,6 @@ import { faBars, faTimes } from '@fortawesome/free-solid-svg-icons'
 const navItems = [
     { name: 'Home', href: '/' },
     { name: 'About', href: '/about-us' },
-    { name: 'Services', href: '/services' },
     { name: 'Contact', href: '/contact-us' },
 ]
 
