@@ -12,6 +12,14 @@ export default function Header() {
     const [activeLink, setActiveLink] = useState('/');
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+    const toggleMenu = () => {
+        setIsMenuOpen(!isMenuOpen);
+        // Toggle body scroll
+        if (typeof window !== 'undefined') {
+            document.body.style.overflow = isMenuOpen ? 'auto' : 'hidden';
+        }
+    };
+
     return (
         <header className="bg-white border-b border-gray-300 shadow-lg">
             <div className="container mx-auto px-4 flex items-center justify-between py-2">
@@ -28,7 +36,7 @@ export default function Header() {
                 {/* Hamburger Menu for Mobile */}
                 <button
                     className="text-red-700 text-2xl md:hidden"
-                    onClick={() => setIsMenuOpen(!isMenuOpen)}
+                    onClick={toggleMenu}
                 >
                     <FontAwesomeIcon icon={isMenuOpen ? faTimes : faBars} />
                 </button>
@@ -36,13 +44,13 @@ export default function Header() {
                 {/* Navigation Links - Offcanvas */}
                 <nav
                     className={`fixed top-0 left-0 w-3/4 h-full bg-white shadow-lg transform ${isMenuOpen ? 'translate-x-0' : '-translate-x-full'
-                        } transition-transform md:relative md:translate-x-0 md:flex md:space-x-4 items-center`}
+                        } transition-transform md:relative md:translate-x-0 md:flex md:space-x-4 items-center z-40`}
                 >
                     <div className="p-4 md:hidden">
                         {/* Close Button */}
                         <button
                             className="text-red-700 text-2xl"
-                            onClick={() => setIsMenuOpen(false)}
+                            onClick={toggleMenu}
                         >
                             <FontAwesomeIcon icon={faTimes} />
                         </button>
@@ -57,7 +65,7 @@ export default function Header() {
                                     flex items-center`}
                                 onClick={() => {
                                     setActiveLink(item.href);
-                                    setIsMenuOpen(false); // Close menu on click
+                                    toggleMenu(); // Close menu on click
                                 }}
                             >
                                 {item.name}
@@ -72,6 +80,14 @@ export default function Header() {
                     <span>Radio</span>
                 </button>
             </div>
+
+            {/* Overlay */}
+            {isMenuOpen && (
+                <div
+                    className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 z-30"
+                    onClick={toggleMenu}
+                ></div>
+            )}
         </header>
     );
 }
