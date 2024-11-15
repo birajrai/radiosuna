@@ -1,106 +1,100 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHome, faBars, faTimes, faRadio } from '@fortawesome/free-solid-svg-icons';
-import { useState, useEffect } from 'react';
+'use client'
 
-const menuItems = [
-    { name: 'Home', href: '/', icon: faHome },
-    { name: 'About', href: '/about-us', icon: faRadio },
-    { name: 'Contact', href: '/contact-us', icon: faRadio },
-];
+import { useState, useEffect } from 'react'
+import Image from 'next/image'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faBars, faTimes } from '@fortawesome/free-solid-svg-icons'
+
+const navItems = [
+    { name: 'Home', href: '/' },
+    { name: 'About', href: '/about-us' },
+    { name: 'Services', href: '/services' },
+    { name: 'Contact', href: '/contact-us' },
+]
 
 export default function Header() {
-    const [activeLink, setActiveLink] = useState('/');
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-    useEffect(() => {
-        // Set active link based on the current URL path when the component mounts
-        setActiveLink(window.location.pathname);
-    }, []);
+    const [isMenuOpen, setIsMenuOpen] = useState(false)
+    const pathname = usePathname()
 
     const toggleMenu = () => {
-        setIsMenuOpen(!isMenuOpen);
-    };
+        setIsMenuOpen(!isMenuOpen)
+    }
 
-    const handleLinkClick = (href) => {
-        setActiveLink(href);
-        toggleMenu(); // Close menu on link click for mobile
-    };
+    useEffect(() => {
+        // Close the mobile menu when the route changes
+        setIsMenuOpen(false)
+    }, [pathname])
 
     return (
-        <header className="bg-white border-b border-gray-300">
-            <div className="container mx-auto px-4 flex items-center justify-between py-2">
+        <header className="bg-white shadow-md">
+            <div className="container mx-auto px-4 py-4 flex justify-between items-center">
+                <Link href="/" className="flex items-center">
+                    <Image src="/logo.png" alt="Logo" width={120} height={40} />
+                </Link>
 
-                {/* Home Icon */}
-                <a
-                    href="/"
-                    className={`text-red-700 text-2xl font-semibold ${activeLink === '/' ? 'bg-red-700 text-white p-2 rounded-md' : 'p-2'}`}
-                    onClick={() => handleLinkClick('/')}
-                >
-                    <FontAwesomeIcon icon={faHome} />
-                </a>
-
-                {/* Hamburger Menu for Mobile */}
-                <button
-                    className="text-red-700 text-2xl md:hidden"
-                    onClick={toggleMenu}
-                >
-                    <FontAwesomeIcon icon={isMenuOpen ? faTimes : faBars} />
-                </button>
-
-                {/* Desktop Navigation Links */}
-                <nav className="hidden md:flex space-x-4 items-center">
-                    {menuItems.map((item, index) => (
-                        <a
-                            key={index}
+                {/* Desktop Navigation */}
+                <nav className="hidden md:flex items-center space-x-6">
+                    {navItems.map((item) => (
+                        <Link
+                            key={item.name}
                             href={item.href}
-                            className={`px-4 py-2 font-medium transition-all duration-300 flex items-center ${activeLink === item.href
-                                ? 'bg-red-700 text-white rounded-md'
-                                : 'text-gray-800 hover:text-red-700 hover:bg-gray-200'
+                            className={`transition duration-150 ease-in-out ${pathname === item.href
+                                ? 'text-blue-600 font-semibold'
+                                : 'text-gray-600 hover:text-gray-900'
                                 }`}
-                            onClick={() => handleLinkClick(item.href)}
                         >
-                            <FontAwesomeIcon icon={item.icon} className="mr-2" />
                             {item.name}
-                        </a>
+                        </Link>
                     ))}
+                    <Link
+                        href="/request"
+                        className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition duration-150 ease-in-out"
+                    >
+                        Request
+                    </Link>
                 </nav>
 
-                {/* Radio Button */}
-                <button className="hidden md:flex bg-red-700 text-white px-4 py-2 rounded-md items-center space-x-2 hover:bg-red-800 transition-all duration-300 font-medium">
-                    <FontAwesomeIcon icon={faRadio} />
-                    <span>Radio</span>
+                {/* Mobile Menu Button */}
+                <button className="md:hidden text-gray-600" onClick={toggleMenu}>
+                    <FontAwesomeIcon icon={faBars} className="h-6 w-6" />
                 </button>
             </div>
 
-            {/* Mobile Navigation Menu */}
-            {isMenuOpen && (
-                <nav
-                    className="fixed top-0 left-0 w-3/4 h-full bg-white z-40 transform translate-x-0 transition-transform p-4 md:hidden"
-                >
-                    {/* Close Button */}
-                    <button
-                        className="text-red-700 text-2xl mb-4"
-                        onClick={toggleMenu}
-                    >
-                        <FontAwesomeIcon icon={faTimes} />
+            {/* Off-canvas Menu for Mobile */}
+            <div
+                className={`fixed top-0 right-0 bottom-0 w-64 bg-white shadow-lg transform transition-transform duration-300 ease-in-out z-50 ${isMenuOpen ? 'translate-x-0' : 'translate-x-full'
+                    } md:hidden`}
+            >
+                <div className="p-4">
+                    <button className="mb-4 text-gray-600" onClick={toggleMenu}>
+                        <FontAwesomeIcon icon={faTimes} className="h-6 w-6" />
                     </button>
-
-                    {menuItems.map((item, index) => (
-                        <a
-                            key={index}
-                            href={item.href}
-                            className={`block px-4 py-2 font-medium transition-all duration-300 ${activeLink === item.href
-                                ? 'bg-red-700 text-white rounded-md'
-                                : 'text-gray-800 hover:text-red-700 hover:bg-gray-200'
-                                }`}
-                            onClick={() => handleLinkClick(item.href)}
+                    <nav className="flex flex-col space-y-4">
+                        {navItems.map((item) => (
+                            <Link
+                                key={item.name}
+                                href={item.href}
+                                className={`transition duration-150 ease-in-out ${pathname === item.href
+                                    ? 'text-blue-600 font-semibold'
+                                    : 'text-gray-600 hover:text-gray-900'
+                                    }`}
+                                onClick={toggleMenu}
+                            >
+                                {item.name}
+                            </Link>
+                        ))}
+                        <Link
+                            href="/request"
+                            className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition duration-150 ease-in-out text-center"
+                            onClick={toggleMenu}
                         >
-                            <FontAwesomeIcon icon={item.icon} className="mr-2" />
-                            {item.name}
-                        </a>
-                    ))}
-                </nav>
-            )}
+                            Request
+                        </Link>
+                    </nav>
+                </div>
+            </div>
         </header>
-    );
+    )
 }
