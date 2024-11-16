@@ -21,7 +21,8 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 
 export async function getStaticPaths() {
-    const res = await fetch('https://radiosuna.vercel.app/api/index');
+    const res = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/stream`);
+
 
     const stations = await res.json();
 
@@ -33,7 +34,8 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps({ params }) {
-    const res = await fetch('https://radiosuna.vercel.app/api/index');
+    const res = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/stream`);
+
     const stations = await res.json();
     const station = stations.find((s) => s.slug === params.slug);
     const otherStations = stations.filter((s) => s.slug !== params.slug);
