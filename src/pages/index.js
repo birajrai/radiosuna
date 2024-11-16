@@ -14,7 +14,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 
 export async function getStaticProps() {
-    const res = await fetch('https://radiosuna.vercel.app/api/index');
+    const res = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/stream`);
     const stations = await res.json();
 
     // Get unique pradesh values
