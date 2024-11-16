@@ -1,19 +1,30 @@
-// /pages/api/index.js
-
 export default async function handler(req, res) {
     try {
-        const response = await fetch('https://backend.bishestamedia.com.np/api/stream.php');
-        const data = await response.json();
+        // Fetch data from the external API
+        const response = await fetch('https://backend.bishestamedia.com.np/api/stream.php', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
 
-        // If the fetch fails, throw an error
+        // Check if the response from the external API is successful
         if (!response.ok) {
-            throw new Error('Failed to fetch data from external API');
+            console.error(`External API error: ${response.statusText}`);
+            return res.status(response.status).json({
+                message: `Failed to fetch data: ${response.statusText}`,
+            });
         }
 
-        // Return the fetched data
+        const data = await response.json();
+
+        // Return the fetched data as JSON
         res.status(200).json(data);
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Error fetching data' });
+        console.error('Error in API route:', error.message);
+        res.status(500).json({
+            message: 'An error occurred while fetching data.',
+            error: error.message,
+        });
     }
 }
