@@ -3,6 +3,7 @@ export default async function handler(req, res) {
         const response = await fetch('https://backend.bishestamedia.com.np/api/stream.php');
 
         // Check if the response is JSON
+
         if (response.headers.get('content-type')?.includes('application/json')) {
             const data = await response.json();
             res.status(200).json(data);
