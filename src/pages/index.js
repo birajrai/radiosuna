@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
+import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faSearch,
@@ -14,19 +15,29 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 
 export async function getStaticProps() {
-    const res = await fetch(`${process.env.NEXT_API_SITE_URL}`);
-    const stations = await res.json();
+    try {
+        const res = await axios.get(`${process.env.NEXT_API_SITE_URL}`);
+        const stations = res.data;
 
-    // Get unique pradesh values
-    const pradeshList = [...new Set(stations.map(station => station.pradesh))].sort();
+        // Get unique pradesh values
+        const pradeshList = [...new Set(stations.map(station => station.pradesh))].sort();
 
-    return {
-        props: {
-            stations,
-            pradeshList
-        },
-        revalidate: 3600,
-    };
+        return {
+            props: {
+                stations,
+                pradeshList
+            },
+            revalidate: 3600,
+        };
+    } catch (error) {
+        console.error('Error fetching stations:', error);
+        return {
+            props: {
+                stations: [],
+                pradeshList: []
+            }
+        };
+    }
 }
 
 export default function RadioIndex({ stations, pradeshList }) {
@@ -37,7 +48,6 @@ export default function RadioIndex({ stations, pradeshList }) {
     const [sortOrder, setSortOrder] = useState('asc'); // 'asc' or 'desc'
 
     useEffect(() => {
-        // Load favorites from localStorage
         const storedFavorites = JSON.parse(localStorage.getItem('radioFavorites') || '[]');
         setFavorites(storedFavorites);
     }, []);
@@ -72,7 +82,6 @@ export default function RadioIndex({ stations, pradeshList }) {
         setSelectedPradesh('');
         setShowFavoritesOnly(false);
     };
-
     return (
         <>
             <Head>
