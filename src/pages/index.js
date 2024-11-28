@@ -230,7 +230,7 @@ export default function RadioIndex({ stations, pradeshList }) {
                                                 src={station.logo || '/api/placeholder/200/200'}
                                                 alt={station.name}
                                                 className="w-32 h-32 object-cover rounded-full p-2 mb-4 border"
-                                                style={{ borderColor: `#${Math.floor(Math.random() * 16777215).toString(16)}` }} // Random border color
+                                            // style={{ borderColor: `#${Math.floor(Math.random() * 16777215).toString(16)}` }} // Random border color
                                             />
 
                                             {/* Name and Frequency */}
