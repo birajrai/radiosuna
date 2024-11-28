@@ -163,9 +163,9 @@ export default function RadioStationPage({ station, otherStations }) {
                         <div className="flex items-center">
                             <span className="font-semibold mr-2">For Support:</span>
                             <FontAwesomeIcon icon={faPhone} className="mr-1 text-red-500" />
-                            <a href="tel:+977-1-5010630" className="mr-4">+977-1-5010630</a>
+                            <a href="tel:+977-XXXXXXXXXX" className="mr-4">+977-1-5010630</a>
                             <FontAwesomeIcon icon={faEnvelope} className="mr-1 text-red-500" />
-                            <a href="mailto:radio.support@ratopati.com">radio.support@ratopati.com</a>
+                            <a href="mailto:support@meropatra.com">support@meropatra.com</a>
                         </div>
                     </div>
 
