@@ -21,18 +21,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 
-export async function getStaticPaths() {
-    const res = await axios.get(`${process.env.NEXT_API_SITE_URL}`);
-    const stations = res.data;
-
-    const paths = stations.map((station) => ({
-        params: { slug: station.slug },
-    }));
-
-    return { paths, fallback: false }; // Only pre-rendered paths
-}
-
-export async function getStaticProps({ params }) {
+export async function getServerSideProps({ params }) {
     const res = await axios.get(`${process.env.NEXT_API_SITE_URL}`);
     const stations = res.data;
 
@@ -48,10 +37,8 @@ export async function getStaticProps({ params }) {
             station,
             otherStations,
         },
-        revalidate: 3600, // Optional: Revalidate every hour
     };
 }
-
 
 export default function RadioStationPage({ station, otherStations }) {
     const [isPlaying, setIsPlaying] = useState(false);
