@@ -19,41 +19,49 @@ import {
     faMapLocation,
     faRadio
 } from '@fortawesome/free-solid-svg-icons';
-
+import axios from 'axios';
 export async function getStaticPaths() {
-    const res = await fetch(`${process.env.NEXT_API_SITE_URL}`);
+    try {
+        const res = await axios.get(`${process.env.NEXT_API_SITE_URL}`);
+        const stations = res.data; // Correctly access the `data` property
 
+        const paths = stations.map((station) => ({
+            params: { slug: station.slug },
+        }));
 
-    const stations = await res.json();
-
-    const paths = stations.map((station) => ({
-        params: { slug: station.slug },
-    }));
-
-    return { paths, fallback: 'blocking' };
+        return { paths, fallback: false };
+    } catch (error) {
+        console.error('Error fetching stations for paths:', error);
+        return { paths: [], fallback: false }; // Return empty paths on error
+    }
 }
 
 export async function getStaticProps({ params }) {
-    const res = await fetch(`${process.env.NEXT_API_SITE_URL}`);
+    try {
+        const res = await axios.get(`${process.env.NEXT_API_SITE_URL}`);
+        const stations = res.data; // Correctly access the `data` property
+        const station = stations.find((s) => s.slug === params.slug);
+        const otherStations = stations.filter((s) => s.slug !== params.slug);
 
-    const stations = await res.json();
-    const station = stations.find((s) => s.slug === params.slug);
-    const otherStations = stations.filter((s) => s.slug !== params.slug);
+        if (!station) {
+            return {
+                notFound: true,
+            };
+        }
 
-    if (!station) {
         return {
-            notFound: true,
+            props: {
+                station,
+                otherStations,
+            },
+            revalidate: 3600,
         };
+    } catch (error) {
+        console.error('Error fetching station details:', error);
+        return { notFound: true }; // Handle errors gracefully
     }
-
-    return {
-        props: {
-            station,
-            otherStations,
-        },
-        revalidate: 3600,
-    };
 }
+
 
 export default function RadioStationPage({ station, otherStations }) {
     const [isPlaying, setIsPlaying] = useState(false);
