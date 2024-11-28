@@ -1,53 +1,53 @@
 import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
-import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faSearch,
     faMapLocation,
-    faBroadcastTower,
-    faFilter,
     faSort,
     faTimes,
     faHeart,
     faHeartBroken
 } from '@fortawesome/free-solid-svg-icons';
 
-export async function getStaticProps() {
+// Change to getServerSideProps for real-time data
+export async function getServerSideProps() {
     try {
-        const res = await axios.get(`${process.env.NEXT_API_SITE_URL}`);
-        const stations = res.data;
+        // Fetch data server-side
+        const response = await fetch(`${process.env.NEXT_API_SITE_URL}`);
+        const stations = await response.json();
 
-        // Get unique pradesh values
+        // Process data server-side
         const pradeshList = [...new Set(stations.map(station => station.pradesh))].sort();
 
         return {
             props: {
                 stations,
-                pradeshList
-            },
-            revalidate: 3600,
+                pradeshList,
+                error: null
+            }
         };
     } catch (error) {
-        console.error('Error fetching stations:', error);
         return {
             props: {
                 stations: [],
-                pradeshList: []
+                pradeshList: [],
+                error: 'Failed to load radio stations'
             }
         };
     }
 }
 
-export default function RadioIndex({ stations, pradeshList }) {
+export default function RadioIndex({ stations, pradeshList, error }) {
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedPradesh, setSelectedPradesh] = useState('');
     const [favorites, setFavorites] = useState([]);
     const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
-    const [sortOrder, setSortOrder] = useState('asc'); // 'asc' or 'desc'
+    const [sortOrder, setSortOrder] = useState('asc');
 
     useEffect(() => {
+        // Only handle favorites in useEffect
         const storedFavorites = JSON.parse(localStorage.getItem('radioFavorites') || '[]');
         setFavorites(storedFavorites);
     }, []);
@@ -56,32 +56,49 @@ export default function RadioIndex({ stations, pradeshList }) {
         const newFavorites = favorites.includes(slug)
             ? favorites.filter(f => f !== slug)
             : [...favorites, slug];
-
         setFavorites(newFavorites);
         localStorage.setItem('radioFavorites', JSON.stringify(newFavorites));
     };
 
-    const filteredStations = stations
-        .filter(station => {
-            const matchesSearch = station.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                station.frequency.toLowerCase().includes(searchTerm.toLowerCase());
-            const matchesPradesh = !selectedPradesh || station.pradesh === selectedPradesh;
-            const matchesFavorites = !showFavoritesOnly || favorites.includes(station.slug);
-            return matchesSearch && matchesPradesh && matchesFavorites;
-        })
-        .sort((a, b) => {
-            const nameA = a.name.toLowerCase();
-            const nameB = b.name.toLowerCase();
-            return sortOrder === 'asc'
-                ? nameA.localeCompare(nameB)
-                : nameB.localeCompare(nameA);
-        });
+    // Move filtering logic to a separate function for clarity
+    const getFilteredStations = () => {
+        return stations
+            .filter(station => {
+                const matchesSearch = station.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    station.frequency.toLowerCase().includes(searchTerm.toLowerCase());
+                const matchesPradesh = !selectedPradesh || station.pradesh === selectedPradesh;
+                const matchesFavorites = !showFavoritesOnly || favorites.includes(station.slug);
+                return matchesSearch && matchesPradesh && matchesFavorites;
+            })
+            .sort((a, b) => {
+                const nameA = a.name.toLowerCase();
+                const nameB = b.name.toLowerCase();
+                return sortOrder === 'asc'
+                    ? nameA.localeCompare(nameB)
+                    : nameB.localeCompare(nameA);
+            });
+    };
 
     const resetFilters = () => {
         setSearchTerm('');
         setSelectedPradesh('');
         setShowFavoritesOnly(false);
     };
+
+    // Handle error state
+    if (error) {
+        return (
+            <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+                <div className="text-center">
+                    <h1 className="text-2xl font-bold text-gray-900 mb-4">Error Loading Stations</h1>
+                    <p className="text-gray-600">{error}</p>
+                </div>
+            </div>
+        );
+    }
+
+    const filteredStations = getFilteredStations();
+
     return (
         <>
             <Head>
@@ -225,17 +242,13 @@ export default function RadioIndex({ stations, pradeshList }) {
                                 >
                                     <Link href={`/${station.slug}`}>
                                         <div className="flex flex-col items-center py-4">
-                                            {/* Logo */}
                                             <img
                                                 src={station.logo || '/api/placeholder/200/200'}
                                                 alt={station.name}
                                                 className="w-32 h-32 object-cover rounded-full p-2 mb-4 border"
-                                            // style={{ borderColor: `#${Math.floor(Math.random() * 16777215).toString(16)}` }} // Random border color
                                             />
-
-                                            {/* Name and Frequency */}
                                             <div className="text-center px-4">
-                                                <h3 className="font-semibold text-gray-900 mb-1 text-sm">{station.name}</h3> {/* Station Name */}
+                                                <h3 className="font-semibold text-gray-900 mb-1 text-sm">{station.name}</h3>
                                                 <p className="text-xs text-gray-600 flex items-center justify-center">
                                                     {station.frequency}
                                                 </p>
@@ -252,7 +265,7 @@ export default function RadioIndex({ stations, pradeshList }) {
                                             : 'bg-gray-100 text-gray-400'
                                             } opacity-0 group-hover:opacity-100`}
                                     >
-                                        <FontAwesomeIcon icon={faHeart} className="w-6 h-6" /> {/* Heart icon */}
+                                        <FontAwesomeIcon icon={faHeart} className="w-6 h-6" />
                                     </button>
                                 </div>
                             ))}
