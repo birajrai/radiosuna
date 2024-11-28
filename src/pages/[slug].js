@@ -294,27 +294,27 @@ export default function RadioStationPage({ station, otherStations }) {
                     </div>
 
                     {/* Other Stations */}
-                    <div className="space-y-6">
-                        <h2 className="text-2xl font-bold text-gray-900">Other Radio Stations</h2>
-                        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+                    <div className="space-y-4"> {/* Vertical spacing between sections */}
+                        <h2 className="text-lg font-bold text-gray-900">Other Radio Stations</h2> {/* Smaller heading size */}
+                        <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4"> {/* Responsive grid layout */}
                             {otherStations.map((otherStation) => (
                                 <Link
                                     href={`/${otherStation.slug}`}
                                     key={otherStation.id}
-                                    className="bg-white rounded-xl shadow-md hover:shadow-lg transition-all transform hover:scale-105 overflow-hidden border border-gray-100"
+                                    className="bg-white rounded-lg border border-gray-200 shadow-sm hover:shadow-md transition-all transform hover:scale-100 overflow-hidden"
                                 >
-                                    <div className="aspect-square bg-gray-50 border-b border-gray-100">
+                                    <div className="aspect-square bg-gray-50 border-b border-gray-200 flex items-center justify-center h-16 w-16 mx-auto"> {/* Smaller logo box */}
                                         <img
-                                            src={otherStation.logo || '/api/placeholder/200/200'}
+                                            src={otherStation.logo || '/api/placeholder/100/100'} // Placeholder size for smaller logos
                                             alt={otherStation.name}
-                                            className="w-full h-full object-contain p-4"
+                                            className="w-12 h-12 object-contain p-1" // Smaller logo size
                                         />
                                     </div>
-                                    <div className="p-4">
-                                        <h3 className="font-semibold text-gray-900 mb-1">
+                                    <div className="p-2 text-center"> {/* Centered text section */}
+                                        <h3 className="font-semibold text-gray-900 mb-1 text-sm"> {/* Smaller text size */}
                                             {otherStation.name}
                                         </h3>
-                                        <p className="text-sm text-gray-600">
+                                        <p className="text-xs text-gray-600"> {/* Smaller text size */}
                                             {otherStation.frequency} • {otherStation.location}
                                         </p>
                                     </div>
@@ -322,6 +322,7 @@ export default function RadioStationPage({ station, otherStations }) {
                             ))}
                         </div>
                     </div>
+
                 </div>
             </div>
         </>
