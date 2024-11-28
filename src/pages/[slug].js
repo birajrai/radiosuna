@@ -160,14 +160,14 @@ export default function RadioStationPage({ station, otherStations }) {
 
             <div className="min-h-screen bg-gray-50">
                 <div className="max-w-7xl mx-auto p-4 md:p-6 space-y-8">
-                    {/* Breadcrumb */}
+                    {/* Breadcrumb
                     <nav className="text-sm text-gray-500">
                         <Link href="/" className="hover:text-blue-600">
                             Home
                         </Link>
                         <span className="mx-2">/</span>
                         <span className="text-gray-900">{station.name}</span>
-                    </nav>
+                    </nav> */}
 
                     {/* Main Station Player */}
                     <div className="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100">
