@@ -52,7 +52,6 @@ export default function RadioStationPage({ station, otherStations }) {
     const router = useRouter();
 
     useEffect(() => {
-        // Check if station is in favorites
         const favorites = JSON.parse(localStorage.getItem('radioFavorites') || '[]');
         setIsFavorite(favorites.includes(station.slug));
 
@@ -138,7 +137,6 @@ export default function RadioStationPage({ station, otherStations }) {
                 console.error('Error sharing:', err);
             }
         } else {
-            // Fallback - copy to clipboard
             navigator.clipboard.writeText(window.location.href);
         }
     };
@@ -158,173 +156,123 @@ export default function RadioStationPage({ station, otherStations }) {
                 <meta name="description" content={`Listen to ${station.name} live online - ${station.frequency} from ${station.location}`} />
             </Head>
 
-            <div className="min-h-screen bg-gray-50">
-                <div className="max-w-7xl mx-auto p-4 md:p-6 space-y-8">
-                    {/* Breadcrumb
-                    <nav className="text-sm text-gray-500">
-                        <Link href="/" className="hover:text-blue-600">
-                            Home
-                        </Link>
-                        <span className="mx-2">/</span>
-                        <span className="text-gray-900">{station.name}</span>
-                    </nav> */}
+            <div className="min-h-screen bg-gray-100">
+                <div className="max-w-7xl mx-auto p-4 space-y-4">
+                    {/* Support Info */}
+                    <div className="bg-gray-50 text-sm p-2 rounded-lg flex items-center justify-between">
+                        <div className="flex items-center">
+                            <span className="font-semibold mr-2">For Support:</span>
+                            <FontAwesomeIcon icon={faPhone} className="mr-1 text-red-500" />
+                            <a href="tel:+977-1-5010630" className="mr-4">+977-1-5010630</a>
+                            <FontAwesomeIcon icon={faEnvelope} className="mr-1 text-red-500" />
+                            <a href="mailto:radio.support@ratopati.com">radio.support@ratopati.com</a>
+                        </div>
+                    </div>
 
                     {/* Main Station Player */}
-                    <div className="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100">
-                        <div className="grid md:grid-cols-2 gap-8 p-8">
-                            <div className="space-y-6">
-                                <div className="aspect-square bg-gray-50 rounded-xl overflow-hidden border border-gray-100">
-                                    <img
-                                        src={station.logo || '/api/placeholder/400/400'}
-                                        alt={station.name}
-                                        className="w-full h-full object-contain p-4"
-                                    />
-                                </div>
-
-                                <div className="flex flex-col items-center space-y-4">
-                                    <button
-                                        onClick={handlePlay}
-                                        disabled={isLoading}
-                                        className="flex items-center justify-center px-8 py-4 bg-blue-600 text-white rounded-full hover:bg-blue-700 disabled:bg-blue-300 transition-all transform hover:scale-105 w-full max-w-xs shadow-lg"
-                                    >
-                                        {isLoading ? (
-                                            <FontAwesomeIcon icon={faSpinner} spin className="mr-3 text-xl" />
-                                        ) : isPlaying ? (
-                                            <FontAwesomeIcon icon={faPause} className="mr-3 text-xl" />
-                                        ) : (
-                                            <FontAwesomeIcon icon={faPlay} className="mr-3 text-xl" />
-                                        )}
-                                        {isPlaying ? 'Pause' : 'Play'} Stream
-                                    </button>
-
-                                    <div className="flex items-center gap-4 w-full max-w-xs">
-                                        <button
-                                            onClick={toggleMute}
-                                            className="text-gray-600 hover:text-gray-800 p-2"
-                                        >
-                                            <FontAwesomeIcon
-                                                icon={isMuted ? faVolumeMute : faVolumeUp}
-                                                className="text-xl"
-                                            />
-                                        </button>
-                                        <input
-                                            type="range"
-                                            min="0"
-                                            max="1"
-                                            step="0.05"
-                                            value={volume}
-                                            onChange={(e) => handleVolume(parseFloat(e.target.value))}
-                                            className="flex-1 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
-                                        />
-                                    </div>
-                                </div>
+                    <div className="bg-red-100 rounded-lg overflow-hidden">
+                        <div className="flex items-center p-4">
+                            <div className="w-24 h-24 bg-white rounded-full overflow-hidden flex-shrink-0 mr-4">
+                                <img
+                                    src={station.logo || '/placeholder.svg'}
+                                    alt={station.name}
+                                    className="w-full h-full object-contain"
+                                />
                             </div>
-
-                            <div className="space-y-6">
-                                <div className="flex justify-between items-start">
-                                    <div>
-                                        <h1 className="text-4xl font-bold text-gray-900 mb-2">
-                                            {station.name}
-                                        </h1>
-                                        <p className="text-lg text-gray-600">
-                                            Broadcasting from {station.location}
-                                        </p>
-                                    </div>
-                                    <div className="flex gap-2">
-                                        <button
-                                            onClick={toggleFavorite}
-                                            className={`p-2 rounded-full transition-colors ${isFavorite ? 'text-red-500' : 'text-gray-400 hover:text-red-500'
-                                                }`}
-                                        >
-                                            <FontAwesomeIcon icon={faHeart} className="text-xl" />
-                                        </button>
-                                        <button
-                                            onClick={shareStation}
-                                            className="p-2 text-gray-400 hover:text-gray-600 rounded-full transition-colors"
-                                        >
-                                            <FontAwesomeIcon icon={faShare} className="text-xl" />
-                                        </button>
-                                    </div>
-                                </div>
-
-                                <div className="grid gap-4">
-                                    <div className="flex items-center text-gray-600">
-                                        <FontAwesomeIcon icon={faBroadcastTower} className="w-6 mr-4 text-blue-600" />
-                                        <span className="font-medium">{station.frequency}</span>
-                                    </div>
-                                    <div className="flex items-center text-gray-600">
-                                        <FontAwesomeIcon icon={faMapLocation} className="w-6 mr-4 text-blue-600" />
-                                        <span>{station.pradesh} Province, {station.location}</span>
-                                    </div>
-                                    <div className="flex items-center text-gray-600">
-                                        <FontAwesomeIcon icon={faPhone} className="w-6 mr-4 text-blue-600" />
-                                        <a href={`tel:${station.phone}`} className="hover:text-blue-600 transition-colors">
-                                            {station.phone}
-                                        </a>
-                                    </div>
-                                    <div className="flex items-center text-gray-600">
-                                        <FontAwesomeIcon icon={faEnvelope} className="w-6 mr-4 text-blue-600" />
-                                        <a href={`mailto:${station.email}`} className="hover:text-blue-600 transition-colors">
-                                            {station.email}
-                                        </a>
-                                    </div>
-                                    <div className="flex items-center text-gray-600">
-                                        <FontAwesomeIcon icon={faGlobe} className="w-6 mr-4 text-blue-600" />
-                                        <a
-                                            href={station.website}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="hover:text-blue-600 transition-colors"
-                                        >
-                                            Visit Website
-                                        </a>
-                                    </div>
-                                </div>
-
-                                {error && (
-                                    <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg">
-                                        <p className="flex items-center">
-                                            <FontAwesomeIcon icon={faRadio} className="mr-2" />
-                                            {error}
-                                        </p>
-                                    </div>
-                                )}
+                            <div className="flex-grow">
+                                <h1 className="text-2xl font-bold text-red-800">{station.name}</h1>
+                                <p className="text-red-700">{station.frequency} | {station.location}</p>
+                            </div>
+                            <div className="flex-shrink-0">
+                                <button
+                                    onClick={handlePlay}
+                                    disabled={isLoading}
+                                    className="bg-red-600 text-white rounded-full p-4 hover:bg-red-700 transition-colors"
+                                >
+                                    {isLoading ? (
+                                        <FontAwesomeIcon icon={faSpinner} spin className="text-2xl" />
+                                    ) : isPlaying ? (
+                                        <FontAwesomeIcon icon={faPause} className="text-2xl" />
+                                    ) : (
+                                        <FontAwesomeIcon icon={faPlay} className="text-2xl" />
+                                    )}
+                                </button>
+                            </div>
+                        </div>
+                        <div className="bg-red-200 p-2 flex justify-between items-center">
+                            <div className="flex items-center space-x-4">
+                                <FontAwesomeIcon icon={faShare} className="text-red-600 cursor-pointer" onClick={shareStation} />
+                                <FontAwesomeIcon
+                                    icon={faHeart}
+                                    className={`cursor-pointer ${isFavorite ? 'text-red-600' : 'text-gray-400'}`}
+                                    onClick={toggleFavorite}
+                                />
+                            </div>
+                            <div className="flex items-center space-x-2">
+                                <button onClick={toggleMute} className="text-red-600">
+                                    <FontAwesomeIcon icon={isMuted ? faVolumeMute : faVolumeUp} />
+                                </button>
+                                <input
+                                    type="range"
+                                    min="0"
+                                    max="1"
+                                    step="0.05"
+                                    value={volume}
+                                    onChange={(e) => handleVolume(parseFloat(e.target.value))}
+                                    className="w-24"
+                                />
                             </div>
                         </div>
                     </div>
 
+                    {/* Station Info */}
+                    <div className="bg-white rounded-lg p-4 space-y-2">
+                        <div className="flex items-center">
+                            <FontAwesomeIcon icon={faLocationDot} className="text-red-500 mr-2" />
+                            <span>{station.location}</span>
+                        </div>
+                        <div className="flex items-center">
+                            <FontAwesomeIcon icon={faPhone} className="text-red-500 mr-2" />
+                            <a href={`tel:${station.phone}`}>{station.phone}</a>
+                        </div>
+                        <div className="flex items-center">
+                            <FontAwesomeIcon icon={faEnvelope} className="text-red-500 mr-2" />
+                            <a href={`mailto:${station.email}`}>{station.email}</a>
+                        </div>
+                        <div className="flex items-center">
+                            <FontAwesomeIcon icon={faGlobe} className="text-red-500 mr-2" />
+                            <a href={station.website} target="_blank" rel="noopener noreferrer">Website Link</a>
+                        </div>
+                    </div>
+
                     {/* Other Stations */}
-                    <div className="space-y-4"> {/* Vertical spacing between sections */}
-                        <h2 className="text-lg font-bold text-gray-900">Other Radio Stations</h2> {/* Smaller heading size */}
-                        <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4"> {/* Responsive grid layout */}
+                    <div className="space-y-2">
+                        <h2 className="text-lg font-bold text-gray-900">Other Radio Stations</h2>
+                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
                             {otherStations.map((otherStation) => (
                                 <Link
                                     href={`/${otherStation.slug}`}
                                     key={otherStation.id}
-                                    className="bg-white rounded-lg border border-gray-200 shadow-sm hover:shadow-md transition-all transform hover:scale-100 overflow-hidden"
+                                    className="bg-white rounded-lg border border-gray-200 p-2 hover:shadow-md transition-all"
                                 >
-                                    <div className="aspect-square bg-gray-50 border-b border-gray-200 flex items-center justify-center h-16 w-16 mx-auto"> {/* Smaller logo box */}
+                                    <div className="w-16 h-16 mx-auto mb-2">
                                         <img
-                                            src={otherStation.logo || '/api/placeholder/100/100'} // Placeholder size for smaller logos
+                                            src={otherStation.logo || '/placeholder.svg'}
                                             alt={otherStation.name}
-                                            className="w-12 h-12 object-contain p-1" // Smaller logo size
+                                            className="w-full h-full object-contain"
                                         />
                                     </div>
-                                    <div className="p-2 text-center"> {/* Centered text section */}
-                                        <h3 className="font-semibold text-gray-900 mb-1 text-sm"> {/* Smaller text size */}
-                                            {otherStation.name}
-                                        </h3>
-                                        <p className="text-xs text-gray-600"> {/* Smaller text size */}
-                                            {otherStation.frequency} • {otherStation.location}
-                                        </p>
+                                    <div className="text-center">
+                                        <h3 className="font-semibold text-sm text-gray-900">{otherStation.name}</h3>
+                                        <p className="text-xs text-gray-600">{otherStation.frequency}</p>
                                     </div>
                                 </Link>
                             ))}
                         </div>
                     </div>
-
                 </div>
             </div>
         </>
     );
 }
+
