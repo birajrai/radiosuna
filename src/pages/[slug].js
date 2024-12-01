@@ -152,7 +152,7 @@ export default function RadioStationPage({ station, otherStations }) {
     return (
         <>
             <Head>
-                <title>{station.name} - Online Radio</title>
+                <title>{`${station.name} - Online Radio`}</title>
                 <meta name="description" content={`Listen to ${station.name} live online - ${station.frequency} from ${station.location}`} />
             </Head>
 
