@@ -11,11 +11,11 @@ export default function Footer() {
                 {/* Contact Information */}
                 <div>
                     <h2 className="text-lg font-semibold mb-2">Contact</h2>
-                    <p>123 Example St, Cityville</p>
-                    <p>+123 456 7890</p>
-                    <p>contact@example.com</p>
-                    <p>support@example.com</p>
-                    <p>info@example.com</p>
+                    <p>Bagmati, Nepal</p>
+                    {/* <p>+977-0000000000</p> */}
+                    <p>contact@bishestamedia.com.np</p>
+                    <p>support@bishestamedia.com.np</p>
+                    <p>info@bishestamedia.com.np</p>
                 </div>
 
                 {/* Useful Links */}
@@ -34,9 +34,9 @@ export default function Footer() {
 
                 {/* Logo and Copyright */}
                 <div className="flex flex-col items-center md:items-end">
-                    <img src="https://via.placeholder.com/150" alt="Company Logo" className="w-32 mb-2" />
-                    <p>&copy; 2024 Copyright Example Company | All rights reserved.</p>
-                    <p className="mt-1 text-xs">All content published here is the property of Example Company.</p>
+                    <img src="/logo.png" alt="Company Logo" className="w-32 mb-2" />
+                    <p>&copy; 2024 Copyright Radio Suna | All rights reserved.</p>
+                    <p className="mt-1 text-xs">All content is not affiliated with this site.</p>
                     <div className="flex space-x-4 mt-4">
                         <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="text-gray-800 hover:text-gray-600" aria-label="Facebook">
                             <FontAwesomeIcon icon={faFacebook} size="lg" />
@@ -55,7 +55,7 @@ export default function Footer() {
             </div>
 
             <div className="text-center mt-6 text-xs">
-                Design & Developed by <span className="font-semibold">Your Company</span>
+                Design & Developed by <span className="font-semibold"><a href='https://github.com/birajrai'>Biraj Rai</a></span>
             </div>
         </footer>
     );
