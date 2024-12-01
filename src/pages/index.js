@@ -240,7 +240,7 @@ export default function RadioIndex({ stations, pradeshList, error }) {
                                     key={station.id}
                                     className="bg-gray-50 rounded-lg hover:shadow-lg transition-all transform hover:scale-105 overflow-hidden relative group"
                                 >
-                                    <Link href={`/${station.slug}`}>
+                                    <Link href={`/listen/${station.slug}`}>
                                         <div className="flex flex-col items-center p-3 sm:p-4">
                                             <img
                                                 src={station.logo || '/api/placeholder/200/200'}

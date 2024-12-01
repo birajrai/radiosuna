@@ -284,7 +284,7 @@ export default function RadioStationPage({ station, otherStations }) {
                         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
                             {otherStations.map((otherStation) => (
                                 <Link
-                                    href={`/${otherStation.slug}`}
+                                    href={`/listen/${otherStation.slug}`}
                                     key={otherStation.id}
                                     className="bg-white rounded-lg border border-gray-200 p-3 hover:shadow-md transition-all"
                                 >
