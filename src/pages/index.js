@@ -229,27 +229,27 @@ export default function RadioIndex({ stations, pradeshList, error }) {
                     {/* Stations Grid */}
                     <div className="space-y-4">
                         <div className="flex justify-between items-center">
-                            <h2 className="text-xl font-semibold text-gray-900">
+                            <h2 className="text-lg sm:text-xl font-semibold text-gray-900">
                                 {filteredStations.length} {filteredStations.length === 1 ? 'Station' : 'Stations'} Found
                             </h2>
                         </div>
 
-                        <div className="grid grid-cols-3 gap-6 sm:grid-cols-3 lg:grid-cols-6">
+                        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
                             {filteredStations.map((station) => (
                                 <div
                                     key={station.id}
                                     className="bg-gray-50 rounded-lg hover:shadow-lg transition-all transform hover:scale-105 overflow-hidden relative group"
                                 >
                                     <Link href={`/${station.slug}`}>
-                                        <div className="flex flex-col items-center py-4">
+                                        <div className="flex flex-col items-center p-3 sm:p-4">
                                             <img
                                                 src={station.logo || '/api/placeholder/200/200'}
                                                 alt={station.name}
-                                                className="w-32 h-32 object-cover rounded-full p-2 mb-4 border"
+                                                className="w-16 h-16 sm:w-24 sm:h-24 md:w-32 md:h-32 object-cover rounded-full p-1 sm:p-2 mb-2 sm:mb-4 border"
                                             />
-                                            <div className="text-center px-4">
-                                                <h3 className="font-semibold text-gray-900 mb-1 text-sm">{station.name}</h3>
-                                                <p className="text-xs text-gray-600 flex items-center justify-center">
+                                            <div className="text-center px-2 sm:px-4">
+                                                <h3 className="font-semibold text-gray-900 mb-1 text-xs sm:text-sm truncate max-w-full">{station.name}</h3>
+                                                <p className="text-xs text-gray-600 flex items-center justify-center truncate max-w-full">
                                                     {station.frequency}
                                                 </p>
                                             </div>
@@ -260,31 +260,33 @@ export default function RadioIndex({ stations, pradeshList, error }) {
                                             e.preventDefault();
                                             toggleFavorite(station.slug);
                                         }}
-                                        className={`absolute top-2 right-2 p-2 rounded-full transition-opacity ${favorites.includes(station.slug)
-                                            ? 'bg-red-100 text-red-500'
-                                            : 'bg-gray-100 text-gray-400'
+                                        className={`absolute top-1 right-1 sm:top-2 sm:right-2 p-1 sm:p-2 rounded-full transition-opacity ${favorites.includes(station.slug)
+                                                ? 'bg-red-100 text-red-500'
+                                                : 'bg-gray-100 text-gray-400'
                                             } opacity-0 group-hover:opacity-100`}
                                     >
-                                        <FontAwesomeIcon icon={faHeart} className="w-6 h-6" />
+                                        <FontAwesomeIcon icon={faHeart} className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" />
                                     </button>
                                 </div>
                             ))}
                         </div>
 
                         {filteredStations.length === 0 && (
-                            <div className="text-center py-12 bg-white rounded-xl shadow-md">
-                                <p className="text-gray-600">
+                            <div className="text-center py-8 sm:py-12 bg-white rounded-xl shadow-md">
+                                <p className="text-gray-600 text-sm sm:text-base">
                                     No radio stations found matching your criteria.
                                 </p>
                                 <button
                                     onClick={resetFilters}
-                                    className="mt-4 text-blue-600 hover:text-blue-700"
+                                    className="mt-3 sm:mt-4 text-blue-600 hover:text-blue-700 text-sm sm:text-base"
                                 >
                                     Clear all filters
                                 </button>
                             </div>
                         )}
                     </div>
+
+
                 </div>
             </div>
         </>
