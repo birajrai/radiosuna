@@ -157,60 +157,69 @@ export default function RadioStationPage({ station, otherStations }) {
             </Head>
 
             <div className="min-h-screen bg-gray-100">
-                <div className="max-w-7xl mx-auto p-4 space-y-4">
+                <div className="max-w-5xl mx-auto p-6 space-y-6">
                     {/* Support Info */}
-                    <div className="bg-gray-50 text-sm p-2 rounded-lg flex items-center justify-between">
-                        <div className="flex items-center">
-                            <span className="font-semibold mr-2">For Support:</span>
-                            <FontAwesomeIcon icon={faPhone} className="mr-1 text-red-500" />
-                            <a href="tel:+977-XXXXXXXXXX" className="mr-4">+977-XXXXXXXXXX</a>
-                            <FontAwesomeIcon icon={faEnvelope} className="mr-1 text-red-500" />
-                            <a href="mailto:support@meropatra.com">support@meropatra.com</a>
+                    <div className="bg-red-50 text-sm p-3 rounded-md flex flex-wrap items-center justify-between">
+                        <span className="font-medium text-red-800 mr-2">Need help?</span>
+                        <div className="flex items-center space-x-4">
+                            <a href="tel:+977-XXXXXXXXXX" className="flex items-center text-red-700 hover:text-red-900">
+                                <FontAwesomeIcon icon={faPhone} className="mr-2" />
+                                <span>+977-XXXXXXXXXX</span>
+                            </a>
+                            <a href="mailto:support@meropatra.com" className="flex items-center text-red-700 hover:text-red-900">
+                                <FontAwesomeIcon icon={faEnvelope} className="mr-2" />
+                                <span>support@meropatra.com</span>
+                            </a>
                         </div>
                     </div>
 
                     {/* Main Station Player */}
-                    <div className="bg-red-100 rounded-lg overflow-hidden">
-                        <div className="flex items-center p-4">
-                            <div className="w-24 h-24 bg-white rounded-full overflow-hidden flex-shrink-0 mr-4">
+                    <div className="bg-white rounded-lg overflow-hidden shadow-md border border-gray-200">
+                        <div className="flex items-center p-5">
+                            <div className="w-24 h-24 bg-gray-100 rounded-full overflow-hidden flex-shrink-0 mr-5">
                                 <img
                                     src={station.logo || '/placeholder.svg'}
                                     alt={station.name}
-                                    className="w-full h-full object-contain"
+                                    className="w-full h-full object-cover"
                                 />
                             </div>
                             <div className="flex-grow">
-                                <h1 className="text-2xl font-bold text-red-800">{station.name}</h1>
-                                <p className="text-red-700">{station.frequency} | {station.location}</p>
+                                <h1 className="text-2xl font-bold text-gray-900 mb-1">{station.name}</h1>
+                                <p className="text-base text-gray-600">{station.frequency} | {station.location}</p>
+                                <p className="text-sm text-gray-500 mt-2">Now Playing: {station.currentSong || 'Information not available'}</p>
                             </div>
                             <div className="flex-shrink-0">
                                 <button
                                     onClick={handlePlay}
                                     disabled={isLoading}
-                                    className="bg-red-600 text-white rounded-full p-4 hover:bg-red-700 transition-colors"
+                                    className="bg-red-600 text-white rounded-full p-4 hover:bg-red-700 transition-colors focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50"
                                 >
                                     {isLoading ? (
-                                        <FontAwesomeIcon icon={faSpinner} spin className="text-2xl" />
+                                        <FontAwesomeIcon icon={faSpinner} spin className="text-xl" />
                                     ) : isPlaying ? (
-                                        <FontAwesomeIcon icon={faPause} className="text-2xl" />
+                                        <FontAwesomeIcon icon={faPause} className="text-xl" />
                                     ) : (
-                                        <FontAwesomeIcon icon={faPlay} className="text-2xl" />
+                                        <FontAwesomeIcon icon={faPlay} className="text-xl" />
                                     )}
                                 </button>
                             </div>
                         </div>
-                        <div className="bg-red-200 p-2 flex justify-between items-center">
+                        <div className="bg-gray-50 p-3 flex justify-between items-center">
                             <div className="flex items-center space-x-4">
-                                <FontAwesomeIcon icon={faShare} className="text-red-600 cursor-pointer" onClick={shareStation} />
-                                <FontAwesomeIcon
-                                    icon={faHeart}
-                                    className={`cursor-pointer ${isFavorite ? 'text-red-600' : 'text-gray-400'}`}
+                                <button onClick={shareStation} className="text-gray-600 hover:text-red-600 transition-colors">
+                                    <FontAwesomeIcon icon={faShare} className="text-lg" />
+                                </button>
+                                <button
                                     onClick={toggleFavorite}
-                                />
+                                    className={`transition-colors ${isFavorite ? 'text-red-600' : 'text-gray-400 hover:text-red-600'}`}
+                                >
+                                    <FontAwesomeIcon icon={faHeart} className="text-lg" />
+                                </button>
+                                <span className="text-sm text-gray-500">{station.listeners || '0'} listeners</span>
                             </div>
-                            <div className="flex items-center space-x-2">
-                                <button onClick={toggleMute} className="text-red-600">
-                                    <FontAwesomeIcon icon={isMuted ? faVolumeMute : faVolumeUp} />
+                            <div className="flex items-center space-x-3">
+                                <button onClick={toggleMute} className="text-gray-600 hover:text-red-600 transition-colors">
+                                    <FontAwesomeIcon icon={isMuted ? faVolumeMute : faVolumeUp} className="text-lg" />
                                 </button>
                                 <input
                                     type="range"
@@ -226,51 +235,57 @@ export default function RadioStationPage({ station, otherStations }) {
                     </div>
 
                     {/* Station Info */}
-                    <div className="bg-white rounded-lg p-4 space-y-2">
-                        <div className="flex items-center">
-                            <FontAwesomeIcon icon={faLocationDot} className="text-red-500 mr-2" />
-                            <span>{station.location}</span>
+                    <div className="bg-white rounded-lg p-5 space-y-3 shadow-md border border-gray-200">
+                        <h2 className="text-xl font-semibold text-gray-900 mb-4">Station Information</h2>
+                        <div className="grid grid-cols-2 gap-4 text-base">
+                            <div className="flex items-center">
+                                <FontAwesomeIcon icon={faLocationDot} className="text-red-500 mr-3 text-lg" />
+                                <span className="text-gray-700">{station.location}</span>
+                            </div>
+                            <div className="flex items-center">
+                                <FontAwesomeIcon icon={faPhone} className="text-red-500 mr-3 text-lg" />
+                                <a href={`tel:${station.phone}`} className="text-blue-600 hover:text-blue-800">{station.phone}</a>
+                            </div>
+                            <div className="flex items-center">
+                                <FontAwesomeIcon icon={faEnvelope} className="text-red-500 mr-3 text-lg" />
+                                <a href={`mailto:${station.email}`} className="text-blue-600 hover:text-blue-800">{station.email}</a>
+                            </div>
+                            <div className="flex items-center">
+                                <FontAwesomeIcon icon={faGlobe} className="text-red-500 mr-3 text-lg" />
+                                <a href={station.website} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800">Visit Website</a>
+                            </div>
                         </div>
-                        <div className="flex items-center">
-                            <FontAwesomeIcon icon={faPhone} className="text-red-500 mr-2" />
-                            <a href={`tel:${station.phone}`}>{station.phone}</a>
-                        </div>
-                        <div className="flex items-center">
-                            <FontAwesomeIcon icon={faEnvelope} className="text-red-500 mr-2" />
-                            <a href={`mailto:${station.email}`}>{station.email}</a>
-                        </div>
-                        <div className="flex items-center">
-                            <FontAwesomeIcon icon={faGlobe} className="text-red-500 mr-2" />
-                            <a href={station.website} target="_blank" rel="noopener noreferrer">Website Link</a>
-                        </div>
+                        <p className="text-sm text-gray-500 mt-4">{station.description || 'No description available.'}</p>
                     </div>
 
                     {/* Other Stations */}
-                    <div className="space-y-2">
-                        <h2 className="text-lg font-bold text-gray-900">Other Radio Stations</h2>
-                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                    <div className="space-y-4">
+                        <h2 className="text-xl font-semibold text-gray-900">Other Radio Stations</h2>
+                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
                             {otherStations.map((otherStation) => (
                                 <Link
                                     href={`/${otherStation.slug}`}
                                     key={otherStation.id}
-                                    className="bg-white rounded-lg border border-gray-200 p-2 hover:shadow-md transition-all"
+                                    className="bg-white rounded-lg border border-gray-200 p-3 hover:shadow-md transition-all"
                                 >
-                                    <div className="w-16 h-16 mx-auto mb-2">
+                                    <div className="w-16 h-16 mx-auto mb-3">
                                         <img
                                             src={otherStation.logo || '/placeholder.svg'}
                                             alt={otherStation.name}
-                                            className="w-full h-full object-contain"
+                                            className="w-full h-full object-cover rounded-full"
                                         />
                                     </div>
                                     <div className="text-center">
-                                        <h3 className="font-semibold text-sm text-gray-900">{otherStation.name}</h3>
-                                        <p className="text-xs text-gray-600">{otherStation.frequency}</p>
+                                        <h3 className="font-medium text-sm text-gray-900 truncate">{otherStation.name}</h3>
+                                        <p className="text-xs text-gray-500 truncate">{otherStation.frequency}</p>
                                     </div>
                                 </Link>
                             ))}
                         </div>
                     </div>
                 </div>
+
+
             </div>
         </>
     );
