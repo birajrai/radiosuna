@@ -1,5 +1,5 @@
 import Header from './Header'
-// import Footer from './Footer'
+import Footer from './Footer'
 // import MobileFooterMenu from './MobileFooterMenu'
 
 export default function Layout({ children }) {
@@ -8,7 +8,7 @@ export default function Layout({ children }) {
             <Header />
             <main className="flex-grow w-full">{children}</main>
             {/* <MobileFooterMenu /> */}
-            {/* <Footer /> */}
+            <Footer />
         </div>
     )
 }
