@@ -13,11 +13,8 @@ import {
     faPhone,
     faEnvelope,
     faLocationDot,
-    faBroadcastTower,
-    faShare,
     faHeart,
-    faMapLocation,
-    faRadio
+    faShare
 } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 
@@ -41,6 +38,7 @@ export async function getServerSideProps({ params }) {
 }
 
 export default function RadioStationPage({ station, otherStations }) {
+    const [isPageLoading, setIsPageLoading] = useState(false); // Preloader state
     const [isPlaying, setIsPlaying] = useState(false);
     const [volume, setVolume] = useState(0.8);
     const [isMuted, setIsMuted] = useState(false);
@@ -50,6 +48,21 @@ export default function RadioStationPage({ station, otherStations }) {
     const audioRef = useRef(null);
     const previousVolume = useRef(0.8);
     const router = useRouter();
+
+    useEffect(() => {
+        const handleRouteChangeStart = () => setIsPageLoading(true); // Show preloader
+        const handleRouteChangeComplete = () => setIsPageLoading(false); // Hide preloader
+
+        router.events.on('routeChangeStart', handleRouteChangeStart);
+        router.events.on('routeChangeComplete', handleRouteChangeComplete);
+        router.events.on('routeChangeError', handleRouteChangeComplete); // Handle errors
+
+        return () => {
+            router.events.off('routeChangeStart', handleRouteChangeStart);
+            router.events.off('routeChangeComplete', handleRouteChangeComplete);
+            router.events.off('routeChangeError', handleRouteChangeComplete);
+        };
+    }, [router.events]);
 
     useEffect(() => {
         const favorites = JSON.parse(localStorage.getItem('radioFavorites') || '[]');
@@ -145,6 +158,13 @@ export default function RadioStationPage({ station, otherStations }) {
         return (
             <div className="flex items-center justify-center min-h-screen">
                 <FontAwesomeIcon icon={faSpinner} spin className="text-4xl text-blue-600" />
+            </div>
+        );
+    }
+    if (isPageLoading) {
+        return (
+            <div className="flex items-center justify-center min-h-screen bg-gray-100">
+                <FontAwesomeIcon icon={faSpinner} spin className="text-5xl text-red-600" />
             </div>
         );
     }
