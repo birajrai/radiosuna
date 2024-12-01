@@ -261,8 +261,8 @@ export default function RadioIndex({ stations, pradeshList, error }) {
                                             toggleFavorite(station.slug);
                                         }}
                                         className={`absolute top-1 right-1 sm:top-2 sm:right-2 p-1 sm:p-2 rounded-full transition-opacity ${favorites.includes(station.slug)
-                                                ? 'bg-red-100 text-red-500'
-                                                : 'bg-gray-100 text-gray-400'
+                                            ? 'bg-red-100 text-red-500'
+                                            : 'bg-gray-100 text-gray-400'
                                             } opacity-0 group-hover:opacity-100`}
                                     >
                                         <FontAwesomeIcon icon={faHeart} className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" />
