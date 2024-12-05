@@ -8,8 +8,56 @@ import {
     faSort,
     faTimes,
     faHeart,
-    faHeartBroken
+    faHeartBroken,
+    faBroadcastTower,
+    faPlay,
+    faStar
 } from '@fortawesome/free-solid-svg-icons';
+
+const FeaturedRadioSlider = ({ featuredStations }) => {
+    const [currentIndex, setCurrentIndex] = useState(0);
+
+    useEffect(() => {
+        const timer = setInterval(() => {
+            setCurrentIndex((prevIndex) => (prevIndex + 1) % featuredStations.length);
+        }, 5000);
+        return () => clearInterval(timer);
+    }, [featuredStations.length]);
+
+    return (
+        <div className="relative overflow-hidden bg-gray-100 rounded-xl shadow-md mb-8">
+            <div className="absolute top-2 left-2 bg-yellow-400 text-xs font-bold px-2 py-1 rounded-full text-blue-900 z-10">
+                <FontAwesomeIcon icon={faStar} className="mr-1" />
+                SPONSORED
+            </div>
+            <div className="flex transition-transform duration-500 ease-in-out" style={{ transform: `translateX(-${currentIndex * 100}%)` }}>
+                {featuredStations.map((station) => (
+                    <div key={station.id} className="w-full flex-shrink-0 p-6">
+                        <Link href={`/listen/${station.slug}`}>
+                            <div className="flex items-center space-x-4">
+                                <img src={station.logo} alt={station.name} className="w-24 h-24 object-cover rounded-full" />
+                                <div>
+                                    <h3 className="text-xl font-semibold text-gray-900">{station.name}</h3>
+                                    <p className="text-sm text-gray-600">{station.frequency}</p>
+                                    <p className="text-sm text-blue-600 mt-2">Listen Now</p>
+                                </div>
+                            </div>
+                        </Link>
+                    </div>
+                ))}
+            </div>
+            <div className="absolute bottom-2 left-0 right-0 flex justify-center space-x-2">
+                {featuredStations.map((_, index) => (
+                    <button
+                        key={index}
+                        className={`w-2 h-2 rounded-full ${index === currentIndex ? 'bg-blue-600' : 'bg-gray-300'}`}
+                        onClick={() => setCurrentIndex(index)}
+                    />
+                ))}
+            </div>
+        </div>
+    );
+};
 
 // Change to getServerSideProps for real-time data
 export async function getServerSideProps() {
@@ -98,6 +146,7 @@ export default function RadioIndex({ stations, pradeshList, error }) {
     }
 
     const filteredStations = getFilteredStations();
+    const featuredStations = stations.filter(station => station.sponsor === "true");
 
     return (
         <>
@@ -106,20 +155,23 @@ export default function RadioIndex({ stations, pradeshList, error }) {
                 <meta name="description" content="Listen to your favorite radio stations online. Browse through our collection of radio stations from different provinces of Nepal." />
             </Head>
 
-            <div className="min-h-screen bg-gray-50">
+            <div className="min-h-screen bg-gradient-to-b from-gray-100 to-gray-200">
                 <div className="max-w-7xl mx-auto p-4 md:p-6 space-y-8">
                     {/* Header */}
-                    <div className="text-center space-y-4">
-                        <h1 className="text-4xl font-bold text-gray-900">
+                    <div className="text-center space-y-4 mb-8">
+                        <h1 className="text-4xl font-bold text-gray-900 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600">
                             Online Radio Stations
                         </h1>
                         <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                            Listen to your favorite radio stations from across Nepal. Browse by province, search by name, or save your favorites for quick access.
+                            Discover and listen to your favorite radio stations from across Nepal. Browse by province, search by name, or save your favorites for quick access.
                         </p>
                     </div>
 
+                    {/* Featured Radio Slider */}
+                    <FeaturedRadioSlider featuredStations={featuredStations} />
+
                     {/* Search and Filters */}
-                    <div className="bg-white rounded-xl shadow-md p-6 space-y-4">
+                    <div className="bg-white rounded-xl shadow-lg p-6 space-y-4 mb-8">
                         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
                             {/* Search Input */}
                             <div className="relative">
@@ -227,7 +279,7 @@ export default function RadioIndex({ stations, pradeshList, error }) {
                     </div>
 
                     {/* Stations Grid */}
-                    <div className="space-y-4">
+                    <div className="bg-white rounded-xl shadow-lg p-6 space-y-4">
                         <div className="flex justify-between items-center">
                             <h2 className="text-lg sm:text-xl font-semibold text-gray-900">
                                 {filteredStations.length} {filteredStations.length === 1 ? 'Station' : 'Stations'} Found
@@ -285,10 +337,9 @@ export default function RadioIndex({ stations, pradeshList, error }) {
                             </div>
                         )}
                     </div>
-
-
                 </div>
             </div>
         </>
     );
 }
+
