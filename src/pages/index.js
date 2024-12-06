@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { BannerAd } from '@/components/banner-ad'
 import {
     faSearch,
     faMapLocation,
@@ -170,6 +171,7 @@ export default function RadioIndex({ stations, pradeshList, error }) {
                     {/* Featured Radio Slider */}
                     <FeaturedRadioSlider featuredStations={featuredStations} />
 
+                    <BannerAd />
                     {/* Search and Filters */}
                     <div className="bg-white rounded-xl shadow-lg p-6 space-y-4 mb-8">
                         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -279,6 +281,7 @@ export default function RadioIndex({ stations, pradeshList, error }) {
                     </div>
 
                     {/* Stations Grid */}
+                    <BannerAd />
                     <div className="bg-white rounded-xl shadow-lg p-6 space-y-4">
                         <div className="flex justify-between items-center">
                             <h2 className="text-lg sm:text-xl font-semibold text-gray-900">
