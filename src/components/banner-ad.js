@@ -8,8 +8,7 @@ export function BannerAd() {
     useEffect(() => {
         async function fetchAd() {
             try {
-                console.log('Fetching ad from:', process.env.NEXT_PUBLIC_API_ADS_URL)
-                const response = await fetch(process.env.NEXT_PUBLIC_API_ADS_URL)
+                const response = await fetch('/api/ads')
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`)
                 }
@@ -38,7 +37,7 @@ export function BannerAd() {
     if (!ad) return null
 
     return (
-        <div className="w-full max-w-[728px] h-[90px] mx-auto my-8">
+        <div className="w-full max-w-[728px] mx-auto my-4 md:my-8">
             <a
                 href={ad.ad_link}
                 target="_blank"
@@ -50,10 +49,14 @@ export function BannerAd() {
                     alt={ad.name}
                     width={728}
                     height={90}
-                    className="w-full h-full object-cover"
+                    className="w-full h-auto object-cover"
+                    style={{
+                        maxHeight: '90px',
+                        width: '100%',
+                        height: 'auto',
+                    }}
                 />
             </a>
         </div>
     )
 }
-
