@@ -152,7 +152,8 @@ export default function RadioIndex({ stations, pradeshList, error }) {
     return (
         <>
             <Head>
-                <title>Online Radio Stations - Listen Live</title>
+                <title>Radio Suna - Online Radio Stations | Listen Live</title>
+                <meta name='tag' content='radiosuna' />
                 <meta name="description" content="Listen to your favorite radio stations online. Browse through our collection of radio stations from different provinces of Nepal." />
             </Head>
 
