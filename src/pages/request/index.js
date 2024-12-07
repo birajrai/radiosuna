@@ -63,7 +63,6 @@ const Request = () => {
 
     return (
         <div className="max-w-3xl mx-auto px-4 py-8">
-            <h1 className="text-4xl font-bold text-center mb-6">Request</h1>
             <img src="/request.gif" alt="Radio Suna" className="block mx-auto h-40 mb-6" /> {/* Increased size here */}
 
             {status && (
