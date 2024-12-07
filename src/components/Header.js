@@ -32,7 +32,7 @@ export default function Header() {
         <header className="bg-white shadow-md">
             <div className="container mx-auto px-4 py-4 flex justify-between items-center">
                 <Link href="/" className="flex items-center">
-                    <img src="/logo.svg" alt="Logo" width={270} height={40} />
+                    <img src="/logo.png" alt="RadioSuna Logo" width={270} height={40} />
                 </Link>
 
                 {/* Desktop Navigation */}
