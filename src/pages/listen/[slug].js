@@ -255,27 +255,44 @@ export default function RadioStationPage({ station, otherStations }) {
                     </div>
 
                     {/* Station Info */}
-                    <div className="bg-white rounded-lg p-5 space-y-3 shadow-md border border-gray-200">
-                        <h2 className="text-xl font-semibold text-gray-900 mb-4">Station Information</h2>
-                        <div className="grid grid-cols-2 gap-4 text-base">
-                            <div className="flex items-center">
-                                <FontAwesomeIcon icon={faLocationDot} className="text-red-500 mr-3 text-lg" />
-                                <span className="text-gray-700">{station.location}</span>
+                    <div className="bg-white rounded-lg p-5 space-y-4 shadow-md border border-gray-200">
+                        <h2 className="text-2xl font-semibold text-gray-900 mb-4">Station Information</h2>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div className="space-y-3">
+                                <div className="flex items-start">
+                                    <FontAwesomeIcon icon={faLocationDot} className="text-red-500 mr-3 text-lg mt-1" />
+                                    <div>
+                                        <p className="font-semibold text-gray-700">Visit us at:</p>
+                                        <p className="text-gray-600">{station.location}</p>
+                                    </div>
+                                </div>
+                                <div className="flex items-start">
+                                    <FontAwesomeIcon icon={faPhone} className="text-red-500 mr-3 text-lg mt-1" />
+                                    <div>
+                                        <p className="font-semibold text-gray-700">Talk right now:</p>
+                                        <a href={`tel:${station.phone}`} className="text-blue-600 hover:text-blue-800">{station.phone}</a>
+                                    </div>
+                                </div>
                             </div>
-                            <div className="flex items-center">
-                                <FontAwesomeIcon icon={faPhone} className="text-red-500 mr-3 text-lg" />
-                                <a href={`tel:${station.phone}`} className="text-blue-600 hover:text-blue-800">{station.phone}</a>
-                            </div>
-                            <div className="flex items-center">
-                                <FontAwesomeIcon icon={faEnvelope} className="text-red-500 mr-3 text-lg" />
-                                <a href={`mailto:${station.email}`} className="text-blue-600 hover:text-blue-800">{station.email}</a>
-                            </div>
-                            <div className="flex items-center">
-                                <FontAwesomeIcon icon={faGlobe} className="text-red-500 mr-3 text-lg" />
-                                <a href={station.website} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800">Visit Website</a>
+                            <div className="space-y-3">
+                                <div className="flex items-start">
+                                    <FontAwesomeIcon icon={faEnvelope} className="text-red-500 mr-3 text-lg mt-1" />
+                                    <div>
+                                        <p className="font-semibold text-gray-700">Reach us through email:</p>
+                                        <a href={`mailto:${station.email}`} className="text-blue-600 hover:text-blue-800">{station.email}</a>
+                                    </div>
+                                </div>
+                                <div className="flex items-start">
+                                    <FontAwesomeIcon icon={faGlobe} className="text-red-500 mr-3 text-lg mt-1" />
+                                    <div>
+                                        <p className="font-semibold text-gray-700">Website:</p>
+                                        <a href={station.website} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800">
+                                            {station.website}
+                                        </a>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <p className="text-sm text-gray-500 mt-4">{station.description || 'No description available.'}</p>
                     </div>
 
                     {/* Other Stations */}
