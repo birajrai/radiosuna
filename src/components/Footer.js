@@ -34,7 +34,7 @@ export default function Footer() {
 
                 {/* Logo and Copyright */}
                 <div className="flex flex-col items-center md:items-end">
-                    <img src="/logo.png" alt="Company Logo" className="w-32 mb-2" />
+                    <img src="/logo.svg" alt="Company Logo" className="w-32 mb-2" />
                     <p>&copy; 2024 Copyright Radio Suna | All rights reserved.</p>
                     <p className="mt-1 text-xs">All content is not affiliated with this site.</p>
                     <div className="flex space-x-4 mt-4">
