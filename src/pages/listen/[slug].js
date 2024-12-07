@@ -1,3 +1,4 @@
+// Cool Imports
 import React, { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
@@ -18,6 +19,11 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 
+
+
+
+
+// Backendless but backend
 export async function getServerSideProps({ params }) {
     const res = await axios.get(`${process.env.NEXT_API_SITE_URL}`);
     const stations = res.data;
@@ -48,6 +54,7 @@ export default function RadioStationPage({ station, otherStations }) {
     const audioRef = useRef(null);
     const previousVolume = useRef(0.8);
     const router = useRouter();
+
 
     useEffect(() => {
         const handleRouteChangeStart = () => setIsPageLoading(true); // Show preloader
@@ -212,7 +219,7 @@ export default function RadioStationPage({ station, otherStations }) {
                                 <button
                                     onClick={handlePlay}
                                     disabled={isLoading}
-                                    className="bg-red-600 text-white rounded-full p-4 hover:bg-red-700 transition-colors focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50"
+                                    className="bg-red-600 text-white rounded-full w-16 h-16 flex items-center justify-center hover:bg-red-700 transition-colors focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50"
                                 >
                                     {isLoading ? (
                                         <FontAwesomeIcon icon={faSpinner} spin className="text-xl" />
@@ -222,6 +229,7 @@ export default function RadioStationPage({ station, otherStations }) {
                                         <FontAwesomeIcon icon={faPlay} className="text-xl" />
                                     )}
                                 </button>
+
                             </div>
                         </div>
                         <div className="bg-gray-50 p-3 flex justify-between items-center">
