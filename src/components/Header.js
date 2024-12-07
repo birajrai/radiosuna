@@ -9,6 +9,10 @@ import { faBars, faTimes } from '@fortawesome/free-solid-svg-icons'
 
 const navItems = [
     { name: 'Home', href: '/' },
+    { name: 'About Us', href: '/about-us' },
+    { name: 'Privacy Policy', href: '/privacy-policy' },
+    { name: 'Terms of Service', href: '/terms-of-service' },
+    { name: 'Contact Us', href: '/contact-us' },
 ]
 
 export default function Header() {
@@ -28,7 +32,7 @@ export default function Header() {
         <header className="bg-white shadow-md">
             <div className="container mx-auto px-4 py-4 flex justify-between items-center">
                 <Link href="/" className="flex items-center">
-                    <Image src="/logo.png" alt="Logo" width={120} height={40} />
+                    <img src="/logo.svg" alt="Logo" width={270} height={40} />
                 </Link>
 
                 {/* Desktop Navigation */}
