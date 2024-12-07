@@ -37,7 +37,7 @@ export function BannerAd() {
     if (!ad) return null
 
     return (
-        <div className="w-full max-w-[728px] mx-auto my-4 md:my-8">
+        <div className="w-full max-w-[2048px] mx-auto my-4 md:my-8">
             <a
                 href={ad.ad_link}
                 target="_blank"
@@ -47,11 +47,11 @@ export function BannerAd() {
                 <img
                     src={ad.image_url}
                     alt={ad.name}
-                    width={728}
-                    height={90}
+                    width={2048}
+                    height={120}
                     className="w-full h-auto object-cover"
                     style={{
-                        maxHeight: '90px',
+                        maxHeight: '120px',
                         width: '100%',
                         height: 'auto',
                     }}
