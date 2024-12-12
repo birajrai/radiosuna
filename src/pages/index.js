@@ -152,9 +152,27 @@ export default function RadioIndex({ stations, pradeshList, error }) {
     return (
         <>
             <Head>
-                <title>Radio Suna - Online Radio Stations | Listen Live</title>
-                <meta name='tag' content='radiosuna' />
-                <meta name="description" content="Listen to your favorite radio stations online. Browse through our collection of radio stations from different provinces of Nepal." />
+                <title>Radio Suna | Live Nepali Radio Stations - Listen to Top FM Broadcasts from All Provinces</title>
+                <meta charSet="utf-8" />
+                <meta name="viewport" content="width=device-width, initial-scale=1" />
+                <meta name="description" content="Discover and listen to Nepal's leading radio stations live online. Stream 100+ FM stations from all provinces with crystal-clear audio quality. Get 24/7 access to news, music, entertainment and local programs from across Nepal." />
+
+                {/* Primary Meta Tags */}
+                <meta name="title" content="Radio Suna | Live Nepali Radio Stations - Listen to Top FM Broadcasts from All Provinces" />
+                <meta name="keywords" content="Nepal radio, FM radio online, Nepali radio stations, live radio streaming, Radio Suna, provincial radio, Nepali music streaming, live FM Nepal, online radio Nepal" />
+                <meta name="author" content="Radio Suna" />
+                <meta name="robots" content="index, follow" />
+
+                {/* Open Graph Tags */}
+                <meta property="og:type" content="website" />
+                <meta property="og:title" content="Radio Suna | Stream Nepal's Best Radio Stations Live" />
+                <meta property="og:description" content="Listen to 100+ Nepali radio stations online. Stream live FM broadcasts featuring news, music and entertainment from all provinces." />
+                <meta property="og:site_name" content="Radio Suna" />
+
+                {/* Twitter Card Tags */}
+                <meta name="twitter:card" content="summary_large_image" />
+                <meta name="twitter:title" content="Radio Suna | Stream Nepal's Best Radio Stations Live" />
+                <meta name="twitter:description" content="Listen to 100+ Nepali radio stations online. Stream live FM broadcasts featuring news, music and entertainment from all provinces." />
             </Head>
 
             <div className="min-h-screen bg-gradient-to-b from-gray-100 to-gray-200">
@@ -298,7 +316,7 @@ export default function RadioIndex({ stations, pradeshList, error }) {
                                     <Link href={`/listen/${station.slug}`}>
                                         <div className="flex flex-col items-center p-3 sm:p-4">
                                             <img
-                                                src={station.logo || '/api/placeholder/200/200'}
+                                                src={station.logo || '/images/logo-ph.png'}
                                                 alt={station.name}
                                                 className="w-16 h-16 sm:w-24 sm:h-24 md:w-32 md:h-32 object-cover rounded-full p-1 sm:p-2 mb-2 sm:mb-4 border"
                                             />
