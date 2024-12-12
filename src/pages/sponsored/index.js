@@ -13,9 +13,7 @@ export default function SponsoredRadios() {
     useEffect(() => {
         const fetchSponsoredStations = async () => {
             try {
-                const response = await axios.get(process.env.NEXT_PUBLIC_API_SITE_URL, {
-                    timeout: 10000, // 10 seconds timeout
-                });
+                const response = await axios.get(process.env.NEXT_PUBLIC_API_SITE_URL);
                 const allStations = response.data;
                 const sponsored = allStations.filter(station => station.sponsor === "true");
                 setSponsoredStations(sponsored);
