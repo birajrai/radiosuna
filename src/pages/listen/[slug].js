@@ -179,8 +179,33 @@ export default function RadioStationPage({ station, otherStations }) {
     return (
         <>
             <Head>
-                <title>{`${station.name} - Online Radio`}</title>
-                <meta name="description" content={`Listen to ${station.name} live online - ${station.frequency} from ${station.location}`} />
+                <title>{`Listening to ${station.name} - Live Online Radio ${station.frequency}`}</title>
+                <meta name="description" content={`Listen to ${station.name} live online streaming at ${station.frequency}. Enjoy live radio broadcast from ${station.location} with high-quality audio streaming.`} />
+                <meta property="og:title" content={`Listening to ${station.name} - Live Online Radio ${station.frequency}`} />
+                <meta property="og:description" content={`Listen to ${station.name} live online streaming at ${station.frequency}. Broadcasting live from ${station.location}.`} />
+                <meta property="og:image" content={station.logo || '/images/logo-ph.png'} />
+                <meta property="og:type" content="music.radio_station" />
+                <meta property="og:url" content={`https://radiosuna.bishestamedia.com.np/listen/${station.slug}`} />
+                <meta name="twitter:card" content="summary_large_image" />
+                <meta name="keywords" content={`${station.name}, ${station.frequency}, live radio, online radio, ${station.location} radio, streaming radio, FM radio`} />
+                <link rel="canonical" href={`https://radiosuna.bishestamedia.com.np/listen/${station.slug}`} />
+                <meta name="robots" content="index, follow" />
+                <script type="application/ld+json">
+                    {JSON.stringify({
+                        "@context": "https://schema.org",
+                        "@type": "RadioStation",
+                        "name": station.name,
+                        "url": `https://radiosuna.bishestamedia.com.np/listen/${station.slug}`,
+                        "frequency": station.frequency,
+                        "broadcastTimezone": "Asia/Kathmandu",
+                        "address": {
+                            "@type": "PostalAddress",
+                            "addressLocality": station.location
+                        },
+                        "telephone": station.phone,
+                        "email": station.email
+                    })}
+                </script>
             </Head>
 
             <div className="min-h-screen bg-gray-100">
@@ -205,7 +230,7 @@ export default function RadioStationPage({ station, otherStations }) {
                         <div className="flex items-center p-5">
                             <div className="w-24 h-24 bg-gray-100 rounded-full overflow-hidden flex-shrink-0 mr-5">
                                 <img
-                                    src={station.logo || '/placeholder.svg'}
+                                    src={station.logo || '/images/logo-ph.png'}
                                     alt={station.name}
                                     className="w-full h-full object-cover"
                                 />
@@ -315,7 +340,7 @@ export default function RadioStationPage({ station, otherStations }) {
                                 >
                                     <div className="w-16 h-16 mx-auto mb-3">
                                         <img
-                                            src={otherStation.logo || '/placeholder.svg'}
+                                            src={otherStation.logo || '/images/logo-ph.png'}
                                             alt={otherStation.name}
                                             className="w-full h-full object-cover rounded-full"
                                         />
