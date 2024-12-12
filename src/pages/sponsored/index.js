@@ -13,13 +13,22 @@ export default function SponsoredRadios() {
     useEffect(() => {
         const fetchSponsoredStations = async () => {
             try {
-                const response = await axios.get(process.env.NEXT_PUBLIC_API_SITE_URL);
+                const response = await axios.get(process.env.NEXT_PUBLIC_API_SITE_URL, {
+                    timeout: 10000, // 10 seconds timeout
+                });
                 const allStations = response.data;
                 const sponsored = allStations.filter(station => station.sponsor === "true");
                 setSponsoredStations(sponsored);
                 setIsLoading(false);
             } catch (err) {
+                console.error('Error fetching sponsored stations:', err);
+                if (err.code === 'ECONNABORTED') {
+                    setError('Request timed out. Please check your internet connection and try again.');
+                } else if (err.message === 'Network Error') {
+                    setError('Network error. Please check your internet connection and try again.');
+                } else {
                     setError(`Failed to load sponsored radio stations. ${err.message}`);
+                }
                 setIsLoading(false);
             }
         };
@@ -70,7 +79,7 @@ export default function SponsoredRadios() {
                                     }`}
                             >
                                 <img
-                                    src={station.logo || '/images/logo-ph?height=64&width=64'}
+                                    src={station.logo || '/placeholder.svg?height=64&width=64'}
                                     alt={`${station.name} logo`}
                                     className="w-16 h-16 object-cover rounded-md mr-4"
                                 />
