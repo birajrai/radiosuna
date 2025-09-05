@@ -10,8 +10,6 @@ import {
     faTimes,
     faHeart,
     faHeartBroken,
-    faBroadcastTower,
-    faPlay,
     faStar
 } from '@fortawesome/free-solid-svg-icons';
 
