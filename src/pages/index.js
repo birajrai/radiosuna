@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { BannerAd } from '@/components/banner-ad'
+
 import {
     faSearch,
     faMapLocation,
